@@ -21,16 +21,21 @@ from sensor_msgs.msg import LaserScan
 class MinimalSubscriber(Node):
 
     def __init__(self):
-        super().__init__('minimal_subscriber')
+        super().__init__('ariadna_collision_avoidance')
         self.subscription = self.create_subscription(
             LaserScan,
-            'scan/laser',
+            'scan',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.range_min)
+        min_range=10000.0
+        for range in msg.ranges:
+            if range < min_range:
+                min_range=range
+
+        self.get_logger().info('I heard: "%.5f"' % min_range)
 
 
 def main(args=None):
