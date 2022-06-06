@@ -12,15 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from ast import Constant
 import rclpy
 from rclpy.node import Node
 
 from sensor_msgs.msg import LaserScan
+# from geometry_msgs.msg import Vector3
+from std_msgs.msg import String
 
+INF=1000.0
 
-class MinimalSubscriber(Node):
-
-    def __init__(self):
+class LidarSubscriber(Node):
+    min_dist=INF
+    def __init__(self,min_dist):
         super().__init__('ariadna_collision_avoidance')
         self.subscription = self.create_subscription(
             LaserScan,
@@ -30,27 +34,80 @@ class MinimalSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        min_range=10000.0
+        meas_min_dist = INF
         for range in msg.ranges:
-            if range < min_range:
-                min_range=range
+            if range < meas_min_dist:
+                meas_min_dist = range
+            if meas_min_dist < min_dist:
+                min_dist=meas_min_dist
+                
 
-        self.get_logger().info('I heard: "%.5f"' % min_range)
+        self.get_logger().info('I heard: "%.5f"' % meas_min_dist)
+
+
+class LidarPublisher(Node):
+
+    def __init__(self):
+        super().__init__('ariadna_collision_avoidance')
+        self.publisher_ = self.create_publisher(String, 'cmd_vel', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'linear:\n  x: 0.0\n  y: 0.0\n  z: 0.0\n angular:\n  x: 0.0\n  y: 0.0\n  z: 0.0\n ---\n' % self.i
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
+
+
+class CollisionAvoidance():
+
+    trig_dist=1.0
+    def colav(self, new_min_dist, args=None):
+        self.min_dist=new_min_dist
+        rclpy.init(args=args)
+
+        lidar_subscriber = LidarSubscriber(INF)
+        lidar_publisher = LidarPublisher()
+
+
+        while lidar_subscriber.min_dist < self.trig_dist:
+            rclpy.spin(lidar_subscriber)
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        lidar_subscriber.destroy_node()
+
+        rclpy.spin(lidar_publisher)
+        lidar_publisher.destroy_node()
+        rclpy.shutdown()
+
+
+
+
+        
+
+        
+        rclpy.shutdown()
 
 
 def main(args=None):
-    rclpy.init(args=args)
-
-    minimal_subscriber = MinimalSubscriber()
-
-    rclpy.spin(minimal_subscriber)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    minimal_subscriber.destroy_node()
-    rclpy.shutdown()
+    colav=CollisionAvoidance()
+    colav.colav(1.0)
 
 
 if __name__ == '__main__':
     main()
+
+# To wysyłac na /cmd_vel
+# linear:
+#   x: 0.0
+#   y: 0.0
+#   z: 0.0
+# angular:
+#   x: 0.0
+#   y: 0.0
+#   z: 0.0
+# ---

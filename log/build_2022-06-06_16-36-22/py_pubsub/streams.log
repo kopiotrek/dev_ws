@@ -1,0 +1,19 @@
+[0.758s] Invoking command in '/home/pk/dev_ws/build/py_pubsub': PYTHONPATH=/home/pk/dev_ws/install/py_pubsub/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/pk/dev_ws/install/py_pubsub --editable --build-directory /home/pk/dev_ws/build/py_pubsub/build --no-deps install_data --install-dir /home/pk/dev_ws/install/py_pubsub
+[1.016s] running develop
+[1.163s] running egg_info
+[1.163s] writing py_pubsub.egg-info/PKG-INFO
+[1.163s] writing dependency_links to py_pubsub.egg-info/dependency_links.txt
+[1.164s] writing entry points to py_pubsub.egg-info/entry_points.txt
+[1.164s] writing requirements to py_pubsub.egg-info/requires.txt
+[1.164s] writing top-level names to py_pubsub.egg-info/top_level.txt
+[1.201s] reading manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[1.202s] writing manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[1.239s] running build_ext
+[1.239s] Creating /home/pk/dev_ws/install/py_pubsub/lib/python3.8/site-packages/py-pubsub.egg-link (link to .)
+[1.240s] Installing col_av script to /home/pk/dev_ws/install/py_pubsub/lib/py_pubsub
+[1.240s] Installing listener script to /home/pk/dev_ws/install/py_pubsub/lib/py_pubsub
+[1.241s] Installing talker script to /home/pk/dev_ws/install/py_pubsub/lib/py_pubsub
+[1.241s] 
+[1.241s] Installed /home/pk/dev_ws/build/py_pubsub
+[1.241s] running install_data
+[1.270s] Invoked command in '/home/pk/dev_ws/build/py_pubsub' returned '0': PYTHONPATH=/home/pk/dev_ws/install/py_pubsub/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --prefix /home/pk/dev_ws/install/py_pubsub --editable --build-directory /home/pk/dev_ws/build/py_pubsub/build --no-deps install_data --install-dir /home/pk/dev_ws/install/py_pubsub
